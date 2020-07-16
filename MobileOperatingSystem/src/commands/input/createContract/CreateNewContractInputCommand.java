@@ -69,9 +69,4 @@ public class CreateNewContractInputCommand implements Command {
 			printOut.flush();
 		}
 	}
-
-//	private void viewAvailableContracts(Command parent) throws SQLException {
-//		new ViewContracts(connection, printOut, parent);
-//		ViewContracts.getContracts();
-//	}
 }

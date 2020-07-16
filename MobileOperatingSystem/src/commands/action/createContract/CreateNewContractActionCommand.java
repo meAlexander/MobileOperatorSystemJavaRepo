@@ -3,10 +3,12 @@ package commands.action.createContract;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import commands.Command;
 import exceptions.AddContractException;
+import exceptions.ClientException;
 
 public class CreateNewContractActionCommand implements Command {
 	private Connection connection;
@@ -33,12 +35,16 @@ public class CreateNewContractActionCommand implements Command {
 	@Override
 	public Command execute(Command parent) {
 		try {
+			checkClient();
 			createContract();
 			printOut.println("The contract was created successfully!\n---------------");
 			printOut.flush();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (AddContractException e) {
+			printOut.println(e.getMessage());
+			printOut.flush();
+		} catch (ClientException e) {
 			printOut.println(e.getMessage());
 			printOut.flush();
 		}
@@ -57,6 +63,21 @@ public class CreateNewContractActionCommand implements Command {
 
 		if (ps.execute()) {
 			throw new AddContractException();
+		}
+	}
+	
+	private void checkClient() throws SQLException, ClientException {
+		ResultSet resultSet = connection.prepareStatement(
+				String.format(
+				"SELECT id " + 
+				"FROM clients " +
+				"WHERE id = %d", clientID))
+				.executeQuery();
+
+		if (resultSet.next()) {
+			return;
+		}else {
+			throw new ClientException();
 		}
 	}
 }

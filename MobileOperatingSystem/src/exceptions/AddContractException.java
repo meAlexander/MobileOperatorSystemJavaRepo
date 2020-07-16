@@ -5,6 +5,6 @@ public class AddContractException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "Add contract failed!";
+		return "Add contract failed!\n-------------------";
 	}
 }

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import commands.Command;
 import exceptions.AddServiceException;
+import exceptions.ContractException;
+import exceptions.ServiceException;
 
 public class AddServiceToClientContractActionCommand implements Command {
 	private Connection connection;
@@ -27,18 +29,25 @@ public class AddServiceToClientContractActionCommand implements Command {
 	public Command execute(Command parent) {
 		try {
 			addServiceToClient();
-			printOut.println("The service was added!\n-------------");;
+			
+			printOut.println("The service was added!\n--------------");;
 			printOut.flush();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (AddServiceException e) {
 			printOut.println(e.getMessage());
 			printOut.flush();
+		} catch (ServiceException e) {
+			printOut.println(e.getMessage());
+			printOut.flush();
+		} catch (ContractException e) {
+			printOut.println(e.getMessage());
+			printOut.flush();
 		}
 		return nextCommand;
 	}
 	
-	private void addServiceToClient() throws SQLException, AddServiceException {
+	private void addServiceToClient() throws SQLException, AddServiceException, ServiceException, ContractException {
 		PreparedStatement ps = connection.prepareStatement(
 				"INSERT INTO contracts_services (contract_id, service_id, consumption) " + 
 				"VALUES(?, ?, ?)");
@@ -51,7 +60,7 @@ public class AddServiceToClientContractActionCommand implements Command {
 		}
 	}
 	
-	private double getConsumption() throws SQLException {
+	private double getConsumption() throws SQLException, ServiceException, ContractException {
 		double consumption = 0;
 		ResultSet resultSet = connection.prepareStatement(
 									String.format(
@@ -60,9 +69,27 @@ public class AddServiceToClientContractActionCommand implements Command {
 									"WHERE id = %d", serviceID))
 									.executeQuery();
 		
-		while (resultSet.next()) {
+		if (resultSet.next()) {
 			consumption = resultSet.getDouble("service_limit");
+		}else {
+			throw new ServiceException();
 		}
+		checkContract();
 		return consumption;
+	}
+	
+	private void checkContract() throws SQLException, ContractException{
+		ResultSet resultSet = connection.prepareStatement(
+				String.format(
+				"SELECT id " + 
+				"FROM contracts " +
+				"WHERE id = %d", contractID))
+				.executeQuery();
+
+		if (resultSet.next()) {
+			return;
+		}else {
+			throw new ContractException();
+		}
 	}
 }

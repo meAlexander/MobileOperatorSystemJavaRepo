@@ -14,11 +14,13 @@ public class AddServices implements Command {
 	private Connection connection;
 	private PrintStream printOut;
 	private BufferedReader buffReader;
+	private Command nextCommnad;
 
-	public AddServices(Connection connection, PrintStream printOut, BufferedReader buffReader) {
+	public AddServices(Connection connection, PrintStream printOut, BufferedReader buffReader, Command nextCommnad) {
 		this.connection = connection;
 		this.printOut = printOut;
 		this.buffReader = buffReader;
+		this.nextCommnad = nextCommnad;
 	}
 
 	@Override
@@ -29,7 +31,7 @@ public class AddServices implements Command {
 			printOut.flush();
 
 			String searchClientAnswer = buffReader.readLine();
-			return getNextCommand(searchClientAnswer, parent);
+			return getNextCommand(searchClientAnswer);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InputOptionException e) {
@@ -39,14 +41,14 @@ public class AddServices implements Command {
 		return null;	
 	}
 
-	private Command getNextCommand(String searchClientAnswer, Command parent) throws InputOptionException {
+	private Command getNextCommand(String searchClientAnswer) throws InputOptionException {
 		switch (searchClientAnswer) {
 		case "Add service to client":
 		case "1":
-			return new AddServiceToClientCotractInputCommand(connection, printOut, buffReader, parent);
+			return new AddServiceToClientCotractInputCommand(connection, printOut, buffReader, nextCommnad);
 		case "Add new service":
 		case "2":
-			return new AddNewServiceInputCommand(connection, printOut, buffReader, parent);
+			return new AddNewServiceInputCommand(connection, printOut, buffReader, nextCommnad);
 		case "Admin menu":
 		case "3":
 			return new LoggedInAdminMenuCommand(connection, printOut, buffReader);

@@ -23,7 +23,7 @@ public class ViewInvoiceIssueDate implements Command {
 	@Override
 	public Command execute(Command parent) {
 		try {
-			printOut.println(getInvoiceIssueDate() + "\n---------");
+			printOut.println(getInvoiceIssueDate() + "\n------------");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

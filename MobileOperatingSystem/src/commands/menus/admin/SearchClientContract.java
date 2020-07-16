@@ -25,7 +25,7 @@ public class SearchClientContract implements Command {
 	@Override
 	public Command execute(Command parent) {
 		try {
-			printOut.println("Search client contract by: 1.Phone number\n2.Admin menu");
+			printOut.println("Search client contract by: 1.Phone number 2.Admin menu");
 			printOut.println("Your input please: ");
 			printOut.flush();
 

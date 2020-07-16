@@ -33,7 +33,7 @@ public class AddNewServiceActionCommand implements Command {
 			printOut.flush();
 		} catch (SQLException e) {
 			if (!(service.equals("MIN")) || !(service.equals("MB")) || !(service.equals("SMS"))) {
-				printOut.println("Service must be 'MIN', 'MB', 'SMS'");
+				printOut.println("Service must be 'MIN', 'MB', 'SMS'\n-----------------");
 				printOut.flush();
 			}
 		} catch (AddServiceException e) {

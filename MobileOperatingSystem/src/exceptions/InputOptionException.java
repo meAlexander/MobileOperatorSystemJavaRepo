@@ -5,6 +5,6 @@ public class InputOptionException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "Invalid option!";
+		return "Invalid option!\n--------------------";
 	}
 }

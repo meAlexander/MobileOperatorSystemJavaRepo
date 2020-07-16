@@ -28,8 +28,9 @@ public class LoggedInAdminMenuCommand implements Command {
 					+ "2.Add new client\n"
 					+ "3.Search client contract\n"
 					+ "4.Create new contract\n"
-					+ "5.View debtors\n"
-					+ "6.Main menu");
+					+ "5.View all contracts\n"
+					+ "6.View debtors\n"
+					+ "7.Main menu");
 			printOut.println("Your input please: ");
 			printOut.flush();
 
@@ -50,7 +51,7 @@ public class LoggedInAdminMenuCommand implements Command {
 		switch (adminMenuAnswer) {
 		case "Add services":
 		case "1":
-			return new AddServices(connection, printOut, buffReader);
+			return new AddServices(connection, printOut, buffReader, nextCommand);
 		case "Add new client":
 		case "2":
 			return new AddNewClient(connection, printOut, buffReader, nextCommand);
@@ -60,11 +61,14 @@ public class LoggedInAdminMenuCommand implements Command {
 		case "Create new contract":
 		case "4":
 			return new CreateNewContract(connection, printOut, buffReader, nextCommand);
-		case "View debtors":
+		case "View all contracts":
 		case "5":
+			return new ViewClientContracts(connection, printOut, nextCommand);
+		case "View debtors":
+		case "6":
 			return new ViewDebtors(connection, printOut, buffReader);
 		case "Main menu":
-		case "6":
+		case "7":
 			return new MainMenuCommand(connection, printOut, buffReader);
 		default:
 			throw new InputOptionException();

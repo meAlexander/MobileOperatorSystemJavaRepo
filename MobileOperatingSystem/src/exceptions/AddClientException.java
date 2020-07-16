@@ -5,6 +5,6 @@ public class AddClientException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "Add client failed!";
+		return "Add client failed!\n-------------------";
 	}
 }
