@@ -61,7 +61,7 @@ public class AddNewClientActionCommand implements Command {
 		}
 	}
 	
-	public boolean validatePass() throws SQLException {
+	public boolean validatePass() {
 		Pattern pattern1 = Pattern.compile(PASSWORD_PATTERN);
 		Matcher matcher1 = pattern1.matcher(user.getPassword());
 

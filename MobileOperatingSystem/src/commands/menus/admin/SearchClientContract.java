@@ -36,7 +36,7 @@ public class SearchClientContract implements Command {
 		} catch (InputOptionException e) {
 			printOut.println(e.getMessage());
 			printOut.flush();
-			return parent;
+			return nextCommand;
 		}
 		return null;
 	}

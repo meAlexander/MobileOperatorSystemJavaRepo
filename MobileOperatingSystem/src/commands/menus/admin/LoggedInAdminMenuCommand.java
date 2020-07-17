@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.sql.Connection;
 
 import commands.Command;
-import commands.action.checkForDebtors.CheckForDebtorsActionCommand;
 import commands.menus.MainMenuCommand;
 import exceptions.InputOptionException;
 
@@ -24,7 +23,7 @@ public class LoggedInAdminMenuCommand implements Command {
 	@Override
 	public Command execute(Command parent) {
 		try {
-			printOut.println("Login admin menu:\n"
+			printOut.println("----------\nLogin admin menu:\n"
 					+ "1.Add services\n"
 					+ "2.Add new client\n"
 					+ "3.Search client contract\n"
@@ -34,9 +33,8 @@ public class LoggedInAdminMenuCommand implements Command {
 					+ "7.Main menu");
 			printOut.println("Your input please: ");
 			printOut.flush();
-
+			
 			String adminMenuAnswer = buffReader.readLine();
-			new CheckForDebtorsActionCommand(connection, printOut);
 			return getNextCommand(adminMenuAnswer, parent);
 		} catch (IOException e) {
 			e.printStackTrace();

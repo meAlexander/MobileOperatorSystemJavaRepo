@@ -10,16 +10,21 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import commands.Command;
+import commands.action.viewDebtors.ViewDebtorsActionCommand;
 import exceptions.AddDebtorException;
 import exceptions.DeleteDebtorException;
 
 public class CheckForDebtorsActionCommand implements Command{
 	private Connection connection;
 	private PrintStream printOut;
+	private Command nextCommand;
+	private LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	private int today = localDate.getDayOfMonth();
 	
-	public CheckForDebtorsActionCommand(Connection connection, PrintStream printOut) {
+	public CheckForDebtorsActionCommand(Connection connection, PrintStream printOut, Command nextCommand) {
 		this.connection = connection;
 		this.printOut = printOut;
+		this.nextCommand = nextCommand;
 	}
 
 	@Override
@@ -35,28 +40,25 @@ public class CheckForDebtorsActionCommand implements Command{
 			printOut.println(e.getMessage());
 			printOut.flush();
 		}
-		return null;
+		return new ViewDebtorsActionCommand(connection, printOut, nextCommand);
 	}
 
 	private void checkForDebtors() throws SQLException, AddDebtorException, DeleteDebtorException {
-		LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		int day = localDate.getDayOfMonth();
-		
 		ResultSet resultSet = connection.prepareStatement(
 				"SELECT id, payment_date " + 
 				"FROM contracts")
 				.executeQuery();
 		
 		while (resultSet.next()) {
-			int clientInfo = resultSet.getInt("payment_date");
+			int paymentDate = resultSet.getInt("payment_date");
 			int contractID = (Integer)resultSet.getInt("id");
 			
 			if(checkContract(contractID).equals("no")) {
 				addDebtor(contractID);
 			}
 			
-			if (checkContract(contractID).equals("paid") && checkPayDate(contractID) != day) {
-				if(day == clientInfo) {
+			if (checkContract(contractID).equals("paid") && checkPayDate(contractID) != today) {
+				if(today == paymentDate) {
 					delete(contractID);
 					addDebtor(contractID);
 				}

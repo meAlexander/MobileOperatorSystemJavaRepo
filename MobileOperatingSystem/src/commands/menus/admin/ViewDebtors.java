@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 
 import commands.Command;
-import commands.action.viewDebtors.ViewDebtorsActionCommand;
+import commands.action.checkForDebtors.CheckForDebtorsActionCommand;
 
 public class ViewDebtors implements Command {
 	private Connection connection;
@@ -23,6 +23,7 @@ public class ViewDebtors implements Command {
 	}
 
 	private Command getNextCommand() {
-		return new ViewDebtorsActionCommand(connection, printOut, nextCommand);
+		//return new ViewDebtorsActionCommand(connection, printOut, nextCommand);
+		return new CheckForDebtorsActionCommand(connection, printOut, nextCommand);
 	}
 }

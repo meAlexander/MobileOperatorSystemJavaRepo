@@ -45,5 +45,5 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 contract_id INT UNIQUE NOT NULL,
 CONSTRAINT FOREIGN KEY (contract_id) REFERENCES contracts(id) ON DELETE RESTRICT ON UPDATE CASCADE,
 contract_status ENUM('paid', 'not paid') NOT NULL,
-pay_date INT NULL
+pay_date INT DEFAULT NULL
 );

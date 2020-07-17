@@ -5,10 +5,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import commands.Command;
 import exceptions.AddContractException;
 import exceptions.ClientException;
+import exceptions.CreatePhoneException;
 
 public class CreateNewContractActionCommand implements Command {
 	private Connection connection;
@@ -19,6 +22,7 @@ public class CreateNewContractActionCommand implements Command {
 	private int paymentDate;
 	private String phone;
 	private Command nextCommand;
+	private static final String PHONE_PATTERN = "^[0]+[0-9]{9}";
 
 	public CreateNewContractActionCommand(Connection connection, PrintStream printOut, int clientID,
 			java.sql.Date signingDate, java.sql.Date expiryDate, int paymentDate, String phone, Command nextCommand) {
@@ -36,15 +40,22 @@ public class CreateNewContractActionCommand implements Command {
 	public Command execute(Command parent) {
 		try {
 			checkClient();
-			createContract();
-			printOut.println("The contract was created successfully!\n---------------");
-			printOut.flush();
+			if(validatePhone()) {
+				createContract();
+				printOut.println("The contract was created successfully!\n---------------");
+				printOut.flush();
+			}else {
+				throw new CreatePhoneException();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (AddContractException e) {
 			printOut.println(e.getMessage());
 			printOut.flush();
 		} catch (ClientException e) {
+			printOut.println(e.getMessage());
+			printOut.flush();
+		} catch (CreatePhoneException e) {
 			printOut.println(e.getMessage());
 			printOut.flush();
 		}
@@ -79,5 +90,12 @@ public class CreateNewContractActionCommand implements Command {
 		}else {
 			throw new ClientException();
 		}
+	}
+	
+	private boolean validatePhone() {
+		Pattern pattern = Pattern.compile(PHONE_PATTERN);
+	    Matcher matcher = pattern.matcher(phone);
+	    
+	    return matcher.matches();
 	}
 }

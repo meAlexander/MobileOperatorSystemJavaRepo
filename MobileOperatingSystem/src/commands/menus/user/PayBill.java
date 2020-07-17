@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import client.UserLogin;
 import commands.Command;
@@ -43,13 +46,18 @@ public class PayBill implements Command {
 	}
 	
 	private void pay() throws SQLException, PayBillException {
+		LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int today = localDate.getDayOfMonth();
+		
 		PreparedStatement ps = connection.prepareStatement(
 						"UPDATE debtors " + 
 						"JOIN contracts ON " + 
 						"contracts.id = debtors.contract_id " + 
-						"SET contract_status = 'paid' " + 
+						"SET contract_status = 'paid', " +
+						"pay_date = ? " +
 						"WHERE contracts.phone = ?");
-		ps.setString(1, user.getPhone());
+		ps.setInt(1, today);
+		ps.setString(2, user.getPhone());
 
 		if (ps.execute()) {
 			throw new PayBillException();

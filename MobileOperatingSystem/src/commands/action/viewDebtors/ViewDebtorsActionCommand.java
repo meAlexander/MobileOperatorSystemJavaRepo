@@ -33,7 +33,7 @@ public class ViewDebtorsActionCommand implements Command {
 	private void viewDebtors() throws SQLException {
 		ResultSet resultSet = connection.prepareStatement(
 				String.format(
-				"SELECT phone, client_name, contract_status " + 
+				"SELECT phone, client_name, contract_status, pay_date " + 
 				"FROM debtors de " + 
 				"JOIN contracts co ON " + 
 				"de.contract_id = co.id " + 
@@ -42,10 +42,11 @@ public class ViewDebtorsActionCommand implements Command {
 				.executeQuery();
 		
 		while (resultSet.next()) {
-			String clientInfo = String.format("Phone: %s, Client: %s, Status: %s",
+			String clientInfo = String.format("Phone: %s, Client: %s, Status: %s, Pay date: %d",
 					resultSet.getString("phone"),
 					resultSet.getString("client_name"),
-					resultSet.getString("contract_status"));
+					resultSet.getString("contract_status"),
+					resultSet.getInt("pay_date"));
 			printOut.println(clientInfo);
 			printOut.flush();
 		}

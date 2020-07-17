@@ -30,8 +30,8 @@ VALUES (1, 2, 2500),
 (3, 3, 420),
 (3, 1, 1250);
 
--- INSERT INTO debtors (contract_id, contract_status)
--- VALUES (1, "paid"),
--- (2, "not paid"),
--- (3, "paid"),
--- (4, "not paid");
+-- INSERT INTO debtors (contract_id, contract_status, pay_date)
+-- VALUES (1, "paid", 17),
+-- (2, "not paid", 0),
+-- (3, "paid", 13),
+-- (4, "not paid", 0);
