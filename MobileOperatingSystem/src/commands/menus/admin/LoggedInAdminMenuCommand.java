@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 
 import commands.Command;
+import commands.action.checkForDebtors.CheckForDebtorsActionCommand;
 import commands.menus.MainMenuCommand;
 import exceptions.InputOptionException;
 
@@ -35,6 +36,7 @@ public class LoggedInAdminMenuCommand implements Command {
 			printOut.flush();
 
 			String adminMenuAnswer = buffReader.readLine();
+			new CheckForDebtorsActionCommand(connection, printOut);
 			return getNextCommand(adminMenuAnswer, parent);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,7 +68,7 @@ public class LoggedInAdminMenuCommand implements Command {
 			return new ViewClientContracts(connection, printOut, nextCommand);
 		case "View debtors":
 		case "6":
-			return new ViewDebtors(connection, printOut, buffReader);
+			return new ViewDebtors(connection, printOut, nextCommand);
 		case "Main menu":
 		case "7":
 			return new MainMenuCommand(connection, printOut, buffReader);

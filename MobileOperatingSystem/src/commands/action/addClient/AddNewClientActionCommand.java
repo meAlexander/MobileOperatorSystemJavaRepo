@@ -17,7 +17,7 @@ public class AddNewClientActionCommand implements Command {
 	private PrintStream printOut;
 	private User user;
 	private Command nextCommand;
-	private static final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^*&+=]).{8,}";
+	private static final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^!*&+=]).{8,}";
 
 
 	public AddNewClientActionCommand(Connection connection, PrintStream printOut, User user, Command nextCommand) {

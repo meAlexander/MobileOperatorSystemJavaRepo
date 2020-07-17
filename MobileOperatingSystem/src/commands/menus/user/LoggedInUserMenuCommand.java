@@ -31,7 +31,8 @@ public class LoggedInUserMenuCommand implements Command {
 						+ "2.Check remaining services\n"
 						+ "3.View monthly invoice issue date\n"
 						+ "4.Notifications\n"
-						+ "5.Main menu");
+						+ "5.Pay a bill\n"
+						+ "6.Main menu");
 			
 			printOut.println("Your input please: ");
 			printOut.flush();
@@ -63,8 +64,11 @@ public class LoggedInUserMenuCommand implements Command {
 		case "Notifications":
 		case "4":
 			return new ViewNotifications(connection, printOut, user, nextCommand);
-		case "Main menu":
+		case "Pay a bill":
 		case "5":
+			return new PayBill(connection, printOut, user, nextCommand);
+		case "Main menu":
+		case "6":
 			return new MainMenuCommand(connection, printOut, buffReader);
 		default:
 			throw new InputOptionException();
